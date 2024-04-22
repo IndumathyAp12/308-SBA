@@ -113,7 +113,27 @@ function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
   }
 
 }
-const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+
+  // Create an object to store learner data
+  let learnerData = {};
+
+  // Iterate over each submission
+  let submissions ,forEach(submission => {
+    const { learner_id, assignment_id, submission: { score, submitted_at } } = submission;
+
+    // If learner_id not in learnerData, initialize it
+    if (!learnerData[learner_id]) {
+      learnerData[learner_id] = {
+        id: learner_id,
+        totalScore: 0,
+        totalPoints: 0,
+        avg: 0
+      };
+    
+    }
+  
+    const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+
 
 console.log(result)
-
+  })
