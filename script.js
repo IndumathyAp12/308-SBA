@@ -98,42 +98,26 @@ const LearnerSubmissions = [
 //     return result;
 //   }
 
+// the learner’s total, weighted average :
+function calculateWeightedAverage(scoreData) {
+  let totalPoints = 0;
+  let totalScore = 0;
 
+  scoreData.forEach(score => {
+    totalPoints += score.points_possible;
+    totalScore += score.score;
+  });
 
-function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
-
-  // 1.AssignmentGroup does not belong to its course (mismatching course_id)
-  try {
-    if (AssignmentGroup.course_id !== CourseInfo.id) {
-      throw new Error("AssignmentGroup does not belong to the specified course.");
-    }
-
-  } catch (error) {
-    return { error: error.message };
-  }
-
+  return totalPoints !== 0 ? totalScore / totalPoints : 0; // Avoid division by zero
 }
 
-  // Create an object to store learner data
-  let learnerData = {};
-
-  // Iterate over each submission
-  let submissions ,forEach(submission => {
-    const { learner_id, assignment_id, submission: { score, submitted_at } } = submission;
-
-    // If learner_id not in learnerData, initialize it
-    if (!learnerData[learner_id]) {
-      learnerData[learner_id] = {
-        id: learner_id,
-        totalScore: 0,
-        totalPoints: 0,
-        avg: 0
-      };
-    
-    }
-  
-    const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 
 
-console.log(result)
-  })
+
+
+
+  const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+
+
+  console.log(result)
+
