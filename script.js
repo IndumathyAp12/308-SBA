@@ -98,6 +98,22 @@ const LearnerSubmissions = [
 //     return result;
 //   }
 
+
+// let learnerData = [];
+
+// // If learner_id not in learnerData, initialize it
+//     if (!learnerData[learner_id]) {
+//       learnerData[learner_id] = {
+//         id: learner_id,
+//         totalScore: 0,
+//         totalPoints: 0,
+//         avg: 0
+//       };
+//     }
+
+
+
+
 // the learner’s total, weighted average :
 function calculateWeightedAverage(scoreData) {
   let totalPoints = 0;
@@ -111,14 +127,14 @@ function calculateWeightedAverage(scoreData) {
   return totalPoints !== 0 ? totalScore / totalPoints : 0; // Avoid division by zero
 }
 
-//assignment - due calculation:
+//assignment - due calculation: checking due date with today's date
 function isAssignmentDue(assignment) {
   const dueDate = new Date(assignment.due_at);
   const currentDate = new Date();
   return currentDate >= dueDate;
 }
 
-// checking if the assignment group id and course info id are same
+// checking if the assignment group id and course info id are same using try catch error 
 
 function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
   try {
@@ -126,12 +142,18 @@ function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
       throw new Error("AssignmentGroup does not belong to the specified course.");
     }
 
-    const result = [];
+  
+
+// Calculation of  Learner Submissions in Assignment group :
+const result = [];
 
     LearnerSubmissions.forEach(submission => {
       const assignment = AssignmentGroup.assignments.find(a => a.id === submission.assignment_id);
 
       if (!assignment || !isAssignmentDue(assignment)) return;
+
+
+//Calculation of Learner data using find index:
 
       const learnerIndex = result.findIndex(item => item.id === submission.learner_id);
 
@@ -144,13 +166,33 @@ function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
         result[learnerIndex].scores.push({ id: submission.assignment_id, score: submission.submission.score, points_possible: assignment.points_possible });
       }
     });
+// // If the submission is late, adjust the score accordingly
+//       const dueDate = new Date(AssignmentGroup.assignments.find(assignment => assignment.id === assignment_id).due_at);
+//       const submissionDate = new Date(submitted_at);
+//       if (submissionDate > dueDate) {
+//         const latePenalty = (submissionDate - dueDate) /(1000 * 60 * 60 * 24); ; 
+//         learnerData[learner_id].totalScore -= latePenalty;
+//       }
+
+
+
+ // Calculate average score for each learner
+//   for (const learnerId in learnerData) {
+//     const { totalScore, totalPoints } = learnerData[learnerId];
+//     learnerData[learnerId].avg = totalScore / totalPoints;
+//   }
+
+  // // Convert learnerData object to array format
+  // const output = Object.values(learnerData);
+
+//Calculation of Weighted Average : 
 
     result.forEach(learner => {
       learner.avg = calculateWeightedAverage(learner.scores);
       learner.scores.forEach(score => {
         learner[score.id] = score.score / score.points_possible;
       });
-      delete learner.scores;
+      
     });
 
     return result;
@@ -158,11 +200,6 @@ function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
     return { error: error.message };
   }
 }
-
-
-
-
-
 
     const result1 = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 
