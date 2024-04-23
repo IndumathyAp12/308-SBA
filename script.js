@@ -99,7 +99,7 @@ const LearnerSubmissions = [
 //   }
 
 
-// let learnerData = [];
+// let learnerData = {};
 
 // // If learner_id not in learnerData, initialize it
 //     if (!learnerData[learner_id]) {
@@ -206,8 +206,8 @@ const result = [];
   }
 }
 
-    const result1 = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+    const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 
 
-    console.log(result1)
+    console.log(result)
 
