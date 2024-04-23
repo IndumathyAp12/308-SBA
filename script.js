@@ -134,7 +134,10 @@ function isAssignmentDue(assignment) {
   return currentDate >= dueDate;
 }
 
-// checking if the assignment group id and course info id are same using try catch error 
+
+
+  // Create an object to store learner data
+  const learnerData = {};
 
 function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
   try {
@@ -193,6 +196,8 @@ const result = [];
         learner[score.id] = score.score / score.points_possible;
       });
       
+      delete learner.scores;
+
     });
 
     return result;
