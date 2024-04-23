@@ -111,13 +111,61 @@ function calculateWeightedAverage(scoreData) {
   return totalPoints !== 0 ? totalScore / totalPoints : 0; // Avoid division by zero
 }
 
+//assignment - due calculation:
+function isAssignmentDue(assignment) {
+  const dueDate = new Date(assignment.due_at);
+  const currentDate = new Date();
+  return currentDate >= dueDate;
+}
+
+// checking if the assignment group id and course info id are same
+
+function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
+  try {
+    if (AssignmentGroup.course_id !== CourseInfo.id) {
+      throw new Error("AssignmentGroup does not belong to the specified course.");
+    }
+
+    const result = [];
+
+    LearnerSubmissions.forEach(submission => {
+      const assignment = AssignmentGroup.assignments.find(a => a.id === submission.assignment_id);
+
+      if (!assignment || !isAssignmentDue(assignment)) return;
+
+      const learnerIndex = result.findIndex(item => item.id === submission.learner_id);
+
+      if (learnerIndex === -1) {
+        result.push({
+          id: submission.learner_id,
+          scores: [{ id: submission.assignment_id, score: submission.submission.score, points_possible: assignment.points_possible }]
+        });
+      } else {
+        result[learnerIndex].scores.push({ id: submission.assignment_id, score: submission.submission.score, points_possible: assignment.points_possible });
+      }
+    });
+
+    result.forEach(learner => {
+      learner.avg = calculateWeightedAverage(learner.scores);
+      learner.scores.forEach(score => {
+        learner[score.id] = score.score / score.points_possible;
+      });
+      delete learner.scores;
+    });
+
+    return result;
+  } catch (error) {
+    return { error: error.message };
+  }
+}
 
 
 
 
 
-  const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+
+    const result1 = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 
 
-  console.log(result)
+    console.log(result1)
 
