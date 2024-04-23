@@ -99,7 +99,7 @@ const LearnerSubmissions = [
 //   }
 
 
-// let learnerData = {};
+
 
 // // If learner_id not in learnerData, initialize it
 //     if (!learnerData[learner_id]) {
@@ -124,7 +124,7 @@ function calculateWeightedAverage(scoreData) {
     totalScore += score.score;
   });
 
-  return totalPoints !== 0 ? totalScore / totalPoints : 0; // Avoid division by zero
+  return totalPoints !== 0 ? totalScore / totalPoints : 0; // Check for the condition if point-possible is not zero
 }
 
 //assignment - due calculation: checking due date with today's date
